@@ -1,0 +1,23 @@
+{
+  "name": "pdf-builder",
+  "version": "0.1.0",
+  "description": "PDF builder based on wkhtmltopdf.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexwebb2/node-pdf-builder.git"
+  },
+  "keywords": [
+    "wkhtmltopdf",
+    "pdf-builder"
+  ],
+  "author": "Alex Webb <alexwebb2@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexwebb2/node-pdf-builder/issues"
+  },
+  "homepage": "https://github.com/alexwebb2/node-pdf-builder"
+}
