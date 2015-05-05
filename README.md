@@ -1,5 +1,5 @@
 # node-pdf-builder 0.2.0
-Requires [wkhtmltopdf](wkhtmltopdf.org).
+Requires [wkhtmltopdf](http://wkhtmltopdf.org).
 
 # Installation
 ```
