@@ -20,13 +20,14 @@ new PDF()
 	.addPath('http://google.com', {
 		headerCenter: 'Google',
 		runScript: function() {
-			console.log("Google input being processed...")
+			console.log('Google input being processed...')
 		}
 	})
 	.addPath('http://wkhtmltopdf.com/', {
 		headerCenter: 'wkhtmltopdf',
-		runScript: function() {
-			console.log("wkhtmltopdf input being processed...")
+		fnInput: 'wkhtmltopdf input being processed...',
+		runScript: function(foo) {
+			console.log(foo) // wkhtmltopdf input being processed...
 		}
 	})
 	.setCustomCommand(function() {
