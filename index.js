@@ -59,6 +59,8 @@ PdfClass.prototype.buildCommand = function buildCommand(log) {
 		var parts = []
 
 		for (var key in options) {
+			if (key == 'fnInput') {continue}
+
 			if (options.hasOwnProperty(key)) {
 				var value = options[key]
 				key = key.length === 1 ? '-' + key : '--' + dasherize(key)
@@ -67,7 +69,14 @@ PdfClass.prototype.buildCommand = function buildCommand(log) {
 					parts.push(key)
 				}
 
-				if (typeof value !== 'boolean') {
+				if (typeof value === 'function') {
+					parts.push(
+						quote(
+							'(' + value.toString() + ')(' + JSON.stringify(options.fnInput || null) + ')'
+						)
+					)
+				}
+				else if (typeof value !== 'boolean') {
 					parts.push(quote(value))
 				}
 			}

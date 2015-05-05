@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/alexwebb2/node-pdf-builder/issues"
   },
-  "homepage": "https://github.com/alexwebb2/node-pdf-builder"
+  "homepage": "https://github.com/alexwebb2/node-pdf-builder",
+  "dependencies": {}
 }
