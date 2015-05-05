@@ -1,10 +1,9 @@
 var PdfClass = function() {
-	this.global_options = {}
-	this.pages          = []
-	this.wkpath         = 'wkhtmltopdf'
-	this.command        = ''
-	this.customCommand  = ''
-	this.output         = ''
+	this.global_options  = {}
+	this.pages           = []
+	this.wkpath          = 'wkhtmltopdf'
+	this.command         = ''
+	this.custom_command  = ''
 
 	return this
 }
@@ -16,10 +15,10 @@ PdfClass.prototype.setPath = function setPath(wkpath) {
 
 PdfClass.prototype.setCustomCommand = function setCustomCommand(cmd) {
 	if (typeof cmd == 'string') {
-		this.customCommand = cmd
+		this.custom_command = cmd
 	}
 	else if (typeof cmd == 'function') {
-		this.customCommand = cmd.call(this, this.getCommand())
+		this.custom_command = cmd.call(this, this.getCommand())
 	}
 
 	return this
@@ -30,12 +29,7 @@ PdfClass.prototype.setGlobalOptions = function setGlobalOptions(global_options) 
 	return this
 }
 
-PdfClass.prototype.setOutput = function setOutput(output) {
-	this.output = output
-	return this
-}
-
-PdfClass.prototype.addInput = function addInput(path, options) {
+PdfClass.prototype.addPath = function addPath(path, options) {
 	this.pages.push({
 		path:   path,
 		options: options || {}
@@ -46,18 +40,13 @@ PdfClass.prototype.addInput = function addInput(path, options) {
 
 PdfClass.prototype.buildCommand = function buildCommand(log) {
 	if (!this.wkpath) {
-		throw new Error('wkhtmltopdf: wkpath not specified!')
-	}
-
-	if (!this.output) {
-		throw new Error('wkhtmltopdf: output not specified!')
+		throw new Error('pdf-builder: wkpath not specified!')
 	}
 
 	this.command = [
 		this.wkpath,
 		getOptionsCmdString(this.global_options),
-		getPagesCmdString(this.pages),
-		this.output
+		getPagesCmdString(this.pages)
 	].join(' ')
 
 	if (log) {
@@ -120,13 +109,31 @@ PdfClass.prototype.getCommand = function getCommand() {
 	return this.buildCommand().command
 }
 
-PdfClass.prototype.generate = function generate(callback) {
-	require('child_process').exec(this.customCommand || this.getCommand(), function(err, stdout, stderr) {
-		var js_output = stderr.replace(/\r/g, '\n').split('\n').filter(function(line) {
-			return /^(Warning|Error)/.test(line)
-		}).join('\n')
+PdfClass.prototype.writeFile = function writeFile(path, callback) {
+	if (!path) {
+		throw new Error('pdf-builder-builder: path required for writeFile()')
+	}
 
-		console.log(js_output)
+	var cmd = (this.custom_command || this.getCommand()) + ' ' + path
+
+	require('child_process').exec(cmd, function(err, stdout, stderr) {
+		var js_output = []
+
+		stderr.replace(/\r/g, '\n').split('\n').forEach(function(value, index) {
+			if (/^(Warning|Error)/.test(value)) {
+				value = value.replace(/^(Warning|Error)\:\ /, '')
+
+				if (!/SSL error ignored/.test(value)) {
+					js_output.push(value)
+				}
+			}
+		})
+
+		js_output = js_output.join('\n')
+
+		if (callback && typeof callback == 'function') {
+			callback(err, js_output)
+		}
 	})
 }
 

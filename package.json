@@ -1,6 +1,6 @@
 {
   "name": "pdf-builder",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "PDF builder based on wkhtmltopdf.",
   "main": "index.js",
   "scripts": {
