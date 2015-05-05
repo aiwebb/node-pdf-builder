@@ -49,3 +49,6 @@ new PDF()
 - Accept promises for `runScript` arguments
 - `.stream()`
 - `.addTableOfContents()`
+
+# Acknowledgments
+- Inspired by (and some helper functions lifted from) [devongovett/node-wkhtmltopdf](http://github.com/devongovett/node-wkhtmltopdf)
