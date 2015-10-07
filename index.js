@@ -153,7 +153,7 @@ PdfClass.prototype.stream = function stream(writable) {
 
 	this.writeFile(path, function(err, js_output) {
 
-		require('fs').stat(path, function(stats) {
+		require('fs').stat(path, function(err, stats) {
 			writable.writeHead(200, {
 				'Content-disposition': 'attachment; filename=out.pdf',
 				'Content-type':        'application/octet-stream',
