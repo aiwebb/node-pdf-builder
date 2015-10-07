@@ -152,19 +152,17 @@ PdfClass.prototype.stream = function stream(writable) {
 	var path = '/tmp/pdf-builder-' + require('uuid').v4() + '.pdf'
 
 	this.writeFile(path, function(err, js_output) {
-		var stream = require('fs').createReadStream(path)
 
-		if (writable.download) {
-			writable.download(path)
-		}
-		else if (writable.setHeader) {
-			writable.setHeader('Content-disposition', 'attachment; filename=out.pdf')
-			writable.setHeader('Content-type', 'application/pdf')
+		require('fs').stat(path, function(stats) {
+			writable.writeHead(200, {
+				'Content-disposition': 'attachment; filename=out.pdf',
+				'Content-type':        'application/octet-stream',
+				'Content-length':      stats.size
+			})
+
+			var stream = require('fs').createReadStream(path)
 			stream.pipe(writable)
-		}
-		else {
-			stream.pipe(writable)
-		}
+		})
 	})
 
 	return this
