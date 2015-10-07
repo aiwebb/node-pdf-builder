@@ -4,6 +4,7 @@ var PdfClass = function() {
 	this.wkpath          = 'wkhtmltopdf'
 	this.command         = ''
 	this.custom_command  = ''
+	this.js_output       = ''
 
 	return this
 }
@@ -125,25 +126,42 @@ PdfClass.prototype.writeFile = function writeFile(path, callback) {
 
 	var cmd = (this.custom_command || this.getCommand()) + ' ' + path
 
+	var self = this
 	require('child_process').exec(cmd, function(err, stdout, stderr) {
-		var js_output = []
+		self.js_output = []
 
 		stderr.replace(/\r/g, '\n').split('\n').forEach(function(value, index) {
 			if (/^(Warning|Error)/.test(value)) {
 				value = value.replace(/^(Warning|Error)\:\ /, '')
 
 				if (!/SSL error ignored/.test(value)) {
-					js_output.push(value)
+					self.js_output.push(value)
 				}
 			}
 		})
 
-		js_output = js_output.join('\n')
+		self.js_output = self.js_output.join('\n')
 
 		if (callback && typeof callback == 'function') {
-			callback(err, js_output)
+			callback(err, self.js_output)
 		}
 	})
+}
+
+PdfClass.prototype.stream = function stream(writable) {
+	var path = '/tmp/pdf-builder-' + require('uuid').v4() + '.pdf'
+
+	this.writeFile(path, function(err, js_output) {
+		var stream = require('fs').createReadStream(path)
+
+		if (writable.setHeader) {
+			writable.setHeader('content-type', 'application/pdf')
+		}
+
+		stream.pipe(writable)
+	})
+
+	return this
 }
 
 module.exports = PdfClass

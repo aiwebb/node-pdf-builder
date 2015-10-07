@@ -55,9 +55,9 @@ new PDF()
 - Supports custom commands - use the helper functions as much or as little as you want
 - Suppresses `wkhtmltopdf` progress messages and only returns actual page outputs and errors
 - Supports passing actual functions as `runScript` values, with `fnInput` as its input
+- Supports streaming
 
 # TODO
-- `.stream()`
 - `.addTableOfContents()`
 
 # Acknowledgments

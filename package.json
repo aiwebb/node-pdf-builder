@@ -20,5 +20,7 @@
     "url": "https://github.com/alexwebb2/node-pdf-builder/issues"
   },
   "homepage": "https://github.com/alexwebb2/node-pdf-builder",
-  "dependencies": {}
+  "dependencies": {
+    "uuid": "^2.0.1"
+  }
 }
